@@ -12,11 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/weather")
 public class WeatherController {
 
-    @Autowired
-    private WeatherService weatherService;
+    private final WeatherService weatherService;
+
+    public WeatherController(WeatherService weatherService) {
+        this.weatherService = weatherService;
+    }
+
 
     @GetMapping("/{city}")
     public WeatherResponse getWeather(@PathVariable String city){
         return weatherService.getWeatherByCity(city);
+    }
+
+    @GetMapping("/test")
+    public String check(){
+        return "Test Completed";
     }
 }
