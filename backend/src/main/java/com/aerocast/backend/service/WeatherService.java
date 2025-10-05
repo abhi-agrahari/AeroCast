@@ -35,4 +35,36 @@ public class WeatherService {
 
         return weather;
     }
+
+    public WeatherResponse getWeatherByCoords(double lat, double lon){
+        String url = apiurl + "?lat=" + lat + "&lon=" + lon + "&appid=" + apikey + "&units=metric";
+
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(url, String.class);
+
+        JSONObject json = new JSONObject(response);
+
+        WeatherResponse weather = new WeatherResponse();
+
+        weather.setCity(json.getString("name"));
+        weather.setDescription(json.getJSONArray("weather").getJSONObject(0).getString("description"));
+        weather.setTemperature(json.getJSONObject("main").getDouble("temp"));
+        weather.setHumidity(json.getJSONObject("main").getDouble("humidity"));
+        weather.setWindSpeed(json.getJSONObject("wind").getDouble("speed"));
+
+        return weather;
+    }
+
+    public WeatherResponse getWeatherByIp(String ip){
+        String geoUrl = "http://ip-api.com/json/" + ip;
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(geoUrl, String.class);
+
+        JSONObject geoJson = new JSONObject(response);
+
+        double lat = geoJson.getDouble("lat");
+        double lon = geoJson.getDouble("lon");
+
+        return getWeatherByCoords(lat, lon);
+    }
 }

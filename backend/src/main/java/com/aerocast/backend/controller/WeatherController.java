@@ -2,11 +2,8 @@ package com.aerocast.backend.controller;
 
 import com.aerocast.backend.model.WeatherResponse;
 import com.aerocast.backend.service.WeatherService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/weather")
@@ -27,5 +24,21 @@ public class WeatherController {
     @GetMapping("/test")
     public String check(){
         return "Test Completed";
+    }
+
+    @GetMapping("/coords")
+    public WeatherResponse getWeatherByCoords(@RequestParam double lat, @RequestParam double lon) {
+        return weatherService.getWeatherByCoords(lat, lon);
+    }
+
+    @GetMapping("/ip")
+    public WeatherResponse getWeatherByIp(HttpServletRequest request) {
+        String userip = request.getRemoteAddr();
+
+        if ("127.0.0.1".equals(userip) || "0:0:0:0:0:0:0:1".equals(userip)) {
+            userip = "8.8.8.8";
+        }
+
+        return weatherService.getWeatherByIp(userip);
     }
 }
