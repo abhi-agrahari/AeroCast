@@ -3,6 +3,8 @@ package com.aerocast.backend.controller;
 import com.aerocast.backend.model.WeatherResponse;
 import com.aerocast.backend.service.WeatherService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,5 +42,17 @@ public class WeatherController {
         }
 
         return weatherService.getWeatherByIp(userip);
+    }
+
+    @GetMapping("/forecast/{city}")
+    public ResponseEntity<?> getForecast(@PathVariable String city) {
+        JSONObject forecast = weatherService.getForecast(city);
+        return ResponseEntity.ok(forecast.toMap());
+    }
+
+    @GetMapping("/forecast")
+    public ResponseEntity<?> getForecast(@RequestParam double lat, @RequestParam double lon) {
+        JSONObject forecast = weatherService.getForcastForUser(lat, lon);
+        return ResponseEntity.ok(forecast.toMap());
     }
 }
