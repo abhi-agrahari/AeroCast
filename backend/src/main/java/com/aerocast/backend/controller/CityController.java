@@ -26,6 +26,12 @@ public class CityController {
         return ResponseEntity.ok(added);
     }
 
+    @DeleteMapping("/{city}")
+    public ResponseEntity<?> deleteCity(@PathVariable String city){
+        cityService.deleteCity(city);
+        return ResponseEntity.ok("City Removed");
+    }
+
     @GetMapping
     public ResponseEntity<List<CityModel>> getAllCity(){
         return ResponseEntity.ok(cityService.getAllCity());

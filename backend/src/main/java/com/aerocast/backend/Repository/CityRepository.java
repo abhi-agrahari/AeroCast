@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CityRepository extends MongoRepository<CityModel, String> {
     boolean existsByCityName(String cityName);
+    void deleteByCityName(String cityName);
 }

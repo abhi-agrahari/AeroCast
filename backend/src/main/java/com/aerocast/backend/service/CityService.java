@@ -15,11 +15,15 @@ public class CityService {
         this.cityRepo = cityRepo;
     }
 
-    public CityModel addCity(String cityName) {
-        if (!cityRepo.existsByCityName(cityName)) {
+    public CityModel addCity(String cityName){
+        if(!cityRepo.existsByCityName(cityName)){
             return cityRepo.save(new CityModel(null, cityName));
         }
         return null;
+    }
+
+    public void deleteCity(String cityName){
+        cityRepo.deleteByCityName(cityName);
     }
 
     public List<CityModel> getAllCity(){
