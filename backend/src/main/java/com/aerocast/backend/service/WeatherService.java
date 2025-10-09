@@ -38,58 +38,91 @@ public class WeatherService {
         return weather;
     }
 
-    public WeatherResponse getWeatherByCoords(double lat, double lon){
-        String url = apiurl + "?lat=" + lat + "&lon=" + lon + "&appid=" + apikey + "&units=metric";
-
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
-
-        JSONObject json = new JSONObject(response);
-
-        WeatherResponse weather = new WeatherResponse();
-
-        weather.setCity(json.getString("name"));
-        weather.setDescription(json.getJSONArray("weather").getJSONObject(0).getString("description"));
-        weather.setTemperature(json.getJSONObject("main").getDouble("temp"));
-        weather.setHumidity(json.getJSONObject("main").getDouble("humidity"));
-        weather.setWindSpeed(json.getJSONObject("wind").getDouble("speed"));
-
-        return weather;
-    }
-
-    public WeatherResponse getWeatherByIp(String ip){
-        String geoUrl = "http://ip-api.com/json/" + ip;
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(geoUrl, String.class);
-
-        JSONObject geoJson = new JSONObject(response);
-
-        double lat = geoJson.getDouble("lat");
-        double lon = geoJson.getDouble("lon");
-
-        return getWeatherByCoords(lat, lon);
-    }
-
     public JSONObject getForecast(String city) {
-        String url = "https://api.openweathermap.org/data/2.5/forecast?q="
-                + city + "&appid=" + apikey + "&units=metric";
-
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
 
-        return new JSONObject(response);
+        try {
+            String geoUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city +
+                    "&limit=1&appid=" + apikey;
+            JSONArray geoData = new JSONArray(restTemplate.getForObject(geoUrl, String.class));
+
+            if (geoData.isEmpty()) {
+                return new JSONObject().put("error", "City not found");
+            }
+
+            JSONObject location = geoData.getJSONObject(0);
+            double lat = location.getDouble("lat");
+            double lon = location.getDouble("lon");
+
+            String forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat +
+                    "&lon=" + lon + "&units=metric&appid=" + apikey;
+
+            JSONObject data = new JSONObject(restTemplate.getForObject(forecastUrl, String.class));
+            JSONArray list = data.getJSONArray("list");
+
+            JSONArray forecastArray = new JSONArray();
+            for (int i = 0; i < list.length(); i += 8) {
+                JSONObject item = list.getJSONObject(i);
+                JSONObject main = item.getJSONObject("main");
+                JSONObject weather = item.getJSONArray("weather").getJSONObject(0);
+
+                JSONObject obj = new JSONObject();
+                obj.put("date", item.getString("dt_txt").split(" ")[0]);
+                obj.put("temp", main.getDouble("temp"));
+                obj.put("description", weather.getString("description"));
+                forecastArray.put(obj);
+            }
+
+            return new JSONObject().put("city", city).put("forecast", forecastArray);
+
+        } catch (Exception e) {
+            return new JSONObject().put("error", "Failed to fetch forecast");
+        }
     }
 
-    public JSONObject getForcastForUser(double lat, double lon) {
-        String url = "https://api.openweathermap.org/data/2.5/forecast"
-                + "?lat=" + lat
-                + "&lon=" + lon
-                + "&appid=" + apikey
-                + "&units=metric";
-
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
-
-        return new JSONObject(response);
-    }
 }
+
+//    public WeatherResponse getWeatherByCoords(double lat, double lon){
+//        String url = apiurl + "?lat=" + lat + "&lon=" + lon + "&appid=" + apikey + "&units=metric";
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//        String response = restTemplate.getForObject(url, String.class);
+//
+//        JSONObject json = new JSONObject(response);
+//
+//        WeatherResponse weather = new WeatherResponse();
+//
+//        weather.setCity(json.getString("name"));
+//        weather.setDescription(json.getJSONArray("weather").getJSONObject(0).getString("description"));
+//        weather.setTemperature(json.getJSONObject("main").getDouble("temp"));
+//        weather.setHumidity(json.getJSONObject("main").getDouble("humidity"));
+//        weather.setWindSpeed(json.getJSONObject("wind").getDouble("speed"));
+//
+//        return weather;
+//    }
+
+//    public WeatherResponse getWeatherByIp(String ip){
+//        String geoUrl = "http://ip-api.com/json/" + ip;
+//        RestTemplate restTemplate = new RestTemplate();
+//        String response = restTemplate.getForObject(geoUrl, String.class);
+//
+//        JSONObject geoJson = new JSONObject(response);
+//
+//        double lat = geoJson.getDouble("lat");
+//        double lon = geoJson.getDouble("lon");
+//
+//        return getWeatherByCoords(lat, lon);
+//    }
+
+//    public JSONObject getForcastForUser(double lat, double lon) {
+//        String url = "https://api.openweathermap.org/data/2.5/forecast"
+//                + "?lat=" + lat
+//                + "&lon=" + lon
+//                + "&appid=" + apikey
+//                + "&units=metric";
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//        String response = restTemplate.getForObject(url, String.class);
+//
+//        return new JSONObject(response);
+//    }

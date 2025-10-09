@@ -29,31 +29,31 @@ public class WeatherController {
         return "Test Completed";
     }
 
-    @GetMapping("/coords")
-    public WeatherResponse getWeatherByCoords(@RequestParam double lat, @RequestParam double lon) {
-        return weatherService.getWeatherByCoords(lat, lon);
-    }
-
-    @GetMapping("/ip")
-    public WeatherResponse getWeatherByIp(HttpServletRequest request) {
-        String userip = request.getRemoteAddr();
-
-        if ("127.0.0.1".equals(userip) || "0:0:0:0:0:0:0:1".equals(userip)) {
-            userip = "8.8.8.8";
-        }
-
-        return weatherService.getWeatherByIp(userip);
-    }
-
     @GetMapping("/forecast/{city}")
     public ResponseEntity<?> getForecast(@PathVariable String city) {
         JSONObject forecast = weatherService.getForecast(city);
         return ResponseEntity.ok(forecast.toMap());
     }
 
-    @GetMapping("/forecast")
-    public ResponseEntity<?> getForecast(@RequestParam double lat, @RequestParam double lon) {
-        JSONObject forecast = weatherService.getForcastForUser(lat, lon);
-        return ResponseEntity.ok(forecast.toMap());
-    }
+//    @GetMapping("/coords")
+//    public WeatherResponse getWeatherByCoords(@RequestParam double lat, @RequestParam double lon) {
+//        return weatherService.getWeatherByCoords(lat, lon);
+//    }
+
+//    @GetMapping("/ip")
+//    public WeatherResponse getWeatherByIp(HttpServletRequest request) {
+//        String userip = request.getRemoteAddr();
+//
+//        if ("127.0.0.1".equals(userip) || "0:0:0:0:0:0:0:1".equals(userip)) {
+//            userip = "8.8.8.8";
+//        }
+//
+//        return weatherService.getWeatherByIp(userip);
+//    }
+
+//    @GetMapping("/forecast")
+//    public ResponseEntity<?> getForecast(@RequestParam double lat, @RequestParam double lon) {
+//        JSONObject forecast = weatherService.getForcastForUser(lat, lon);
+//        return ResponseEntity.ok(forecast.toMap());
+//    }
 }
