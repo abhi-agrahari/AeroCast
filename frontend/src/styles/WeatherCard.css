@@ -1,0 +1,54 @@
+.weather-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  width: 100%;
+}
+
+.main-card {
+  background: white;
+  padding: 30px;
+  width: 350px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.main-card h2 {
+  color: black;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.desc {
+  height: 40px;
+  font-size: 20px;
+  color: #666;
+}
+
+.sub-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.sub-card {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  width: 140px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sub-card h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.sub-card p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0077ff;
+}
