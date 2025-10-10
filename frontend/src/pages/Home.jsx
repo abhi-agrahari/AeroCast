@@ -55,7 +55,7 @@ function Home() {
       localStorage.setItem("favorites", JSON.stringify(stored));
       setFavorites(stored);
     } else {
-      toast("City already in favorites!");
+      toast.error("City already in favorites!");
     }
   };
 

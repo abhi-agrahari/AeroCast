@@ -2,6 +2,8 @@ package com.aerocast.backend.controller;
 
 import com.aerocast.backend.model.UserPreference;
 import com.aerocast.backend.service.EmailPreferenceService;
+import com.aerocast.backend.service.EmailVerificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ public class EmailController {
     private final EmailPreferenceService service;
 
     private final RestTemplate restTemplate = new RestTemplate();
+
+    @Autowired
+    private EmailVerificationService emailVerificationService;
 
     public EmailController(EmailPreferenceService service) {
         this.service = service;
@@ -33,9 +38,14 @@ public class EmailController {
             return ResponseEntity.badRequest().body("Invalid email format");
         }
 
+        if (!emailVerificationService.isValidEmail(preference.getEmail())) {
+            return ResponseEntity.badRequest().body("Invalid or disposable email address");
+        }
+
         UserPreference saved = service.saveOrUpdate(preference);
         return ResponseEntity.ok(saved);
     }
+
 
 
     @GetMapping("/{email}")
