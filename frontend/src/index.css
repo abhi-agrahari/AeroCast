@@ -1,11 +1,22 @@
-:root{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-body,html,#root{height:100%;margin:0}
-.app{max-width:720px;margin:24px auto;padding:16px}
-.header h1{margin:0}
-.search{display:flex;gap:8px;margin:12px 0}
-.search input{flex:1;padding:8px;border:1px solid #ddd;border-radius:6px}
-.search button{padding:8px 12px;border-radius:6px}
-.card{border:1px solid #e5e7eb;padding:12px;border-radius:8px;margin-top:8px}
-.row{display:flex;gap:12px;align-items:center}
-.temp{font-size:2rem;font-weight:600}
-.meta{color:#6b7280;margin-top:8px}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: "Segoe UI", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}

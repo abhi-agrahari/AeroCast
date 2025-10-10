@@ -1,0 +1,47 @@
+{
+  "name": "aerocast-electron",
+  "version": "1.0.0",
+  "description": "Electron wrapper for AeroCast (Spring Boot + React) desktop app",
+  "main": "main.js",
+  "author": "Abhishek Agrahari",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "set ELECTRON_START_URL=http://localhost:5173 && electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "electron": "^38.2.2"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.0.5"
+  },
+  "build": {
+    "appId": "com.aerocast.desktop",
+    "productName": "AeroCast",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "../frontend/dist/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend/target/",
+        "to": "backend/"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.icns"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

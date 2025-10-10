@@ -41,6 +41,10 @@ function EmailPreferences() {
     }
   };
 
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className="pref-container">
       <div className="pref-card">
@@ -73,7 +77,13 @@ function EmailPreferences() {
           </label>
         </div>
 
-        <button onClick={savePreferences}>Save</button>
+        {/* Button Container */}
+        <div className="button-container">
+          <button className="back-button" onClick={handleBack}>
+            Back
+          </button>
+          <button onClick={savePreferences}>Save</button>
+        </div>
 
         {message && <p className="message">{message}</p>}
       </div>

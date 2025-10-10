@@ -54,7 +54,7 @@ function WeatherDisplay({ weather, forecast, showForecast, getForecast, addFavor
 
       {!showForecast && (
         <button className="forecast-btn" onClick={getForecast}>
-          Get 7-Day Forecast
+          Get 5-Day Forecast
         </button>
       )}
 
