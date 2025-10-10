@@ -4,8 +4,11 @@ import com.aerocast.backend.model.WeatherResponse;
 import com.aerocast.backend.service.WeatherService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -20,8 +23,23 @@ public class WeatherController {
 
 
     @GetMapping("/{city}")
-    public WeatherResponse getWeather(@PathVariable String city){
-        return weatherService.getWeatherByCity(city);
+    public ResponseEntity<?> getWeather(@PathVariable String city) {
+        try {
+            WeatherResponse weather = weatherService.getWeatherByCity(city);
+
+            if (weather == null || weather.getDescription().startsWith("Error")) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Weather data not found for city: " + city);
+            }
+
+            return ResponseEntity.ok(weather);
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while fetching weather data.");
+        }
     }
 
     @GetMapping("/test")
@@ -33,6 +51,12 @@ public class WeatherController {
     public ResponseEntity<?> getForecast(@PathVariable String city) {
         JSONObject forecast = weatherService.getForecast(city);
         return ResponseEntity.ok(forecast.toMap());
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Map<String, Boolean>> validateCity(@RequestParam String city) {
+        boolean isValid = weatherService.validateCity(city);
+        return ResponseEntity.ok(Map.of("valid", isValid));
     }
 
 //    @GetMapping("/coords")
