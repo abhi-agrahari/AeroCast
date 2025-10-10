@@ -17,26 +17,37 @@ public class WeatherService {
     @Value("${openweather.api.url}")
     private String apiurl;
 
-    public WeatherResponse getWeatherByCity(String city){
+    public WeatherResponse getWeatherByCity(String city) {
+        RestTemplate restTemplate = new RestTemplate();
         String url = apiurl + "?q=" + city + "&appid=" + apikey + "&units=metric";
 
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
+        try {
+            String response = restTemplate.getForObject(url, String.class);
+            JSONObject json = new JSONObject(response);
 
-        JSONObject json = new JSONObject(response);
+            WeatherResponse weather = new WeatherResponse();
+            weather.setCity(json.getString("name"));
+            weather.setDescription(json.getJSONArray("weather")
+                    .getJSONObject(0)
+                    .getString("description"));
+            weather.setTemperature(json.getJSONObject("main").getDouble("temp"));
+            weather.setHumidity(json.getJSONObject("main").getDouble("humidity"));
+            weather.setWindSpeed(json.getJSONObject("wind").getDouble("speed"));
 
-        WeatherResponse weather = new WeatherResponse();
+            return weather;
 
-        weather.setCity(json.getString("name"));
-        weather.setDescription(json.getJSONArray("weather")
-                                    .getJSONObject(0)
-                                    .getString("description"));
-        weather.setTemperature(json.getJSONObject("main").getDouble("temp"));
-        weather.setHumidity(json.getJSONObject("main").getDouble("humidity"));
-        weather.setWindSpeed(json.getJSONObject("wind").getDouble("speed"));
+        } catch (Exception e) {
+            WeatherResponse errorResponse = new WeatherResponse();
+            errorResponse.setCity(city);
+            errorResponse.setDescription("Error: Unable to fetch weather data");
+            errorResponse.setTemperature(0.0);
+            errorResponse.setHumidity(0.0);
+            errorResponse.setWindSpeed(0.0);
 
-        return weather;
+            return errorResponse;
+        }
     }
+
 
     public JSONObject getForecast(String city) {
         RestTemplate restTemplate = new RestTemplate();
@@ -80,6 +91,17 @@ public class WeatherService {
         }
     }
 
+    public boolean validateCity(String city) {
+        String url = "https://api.openweathermap.org/data/2.5/weather?q="
+                + city + "&appid=" + apikey;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getForObject(url, Object.class);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
 
 //    public WeatherResponse getWeatherByCoords(double lat, double lon){
