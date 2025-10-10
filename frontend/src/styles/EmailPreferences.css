@@ -1,0 +1,159 @@
+.home-container {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 2.8rem;
+  color: #9bd5fe;
+  font-weight: bold;
+}
+
+.pref-btn {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pref-btn:hover {
+  background-color: #005fa3;
+}
+
+
+.pref-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: "Poppins", sans-serif;
+}
+
+.pref-card {
+  background: #ffffff;
+  border: 2px solid #0077cc;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 119, 204, 0.2);
+  padding: 40px 60px;
+  width: 400px;
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+.pref-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 119, 204, 0.25);
+}
+
+.pref-card h2 {
+  color: #0077cc;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.pref-card input[type="text"],
+.pref-card input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #0077cc;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s;
+}
+
+.pref-card input:focus {
+  border-color: #0099ff;
+  box-shadow: 0 0 5px #0099ff;
+}
+
+/* 🌈 Toggle switch styling */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0 25px 0;
+  color: #333;
+  font-weight: 500;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+/* When toggled ON */
+.switch input:checked + .slider {
+  background-color: #0077cc;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.pref-card button {
+  background: linear-gradient(90deg, #0077cc, #0099ff);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.pref-card button:hover {
+  background: linear-gradient(90deg, #005fa3, #0077cc);
+  transform: translateY(-2px);
+}
+
+.message {
+  margin-top: 15px;
+  font-weight: 500;
+  color: #0077cc;
+}

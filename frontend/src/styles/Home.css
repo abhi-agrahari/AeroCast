@@ -263,3 +263,14 @@ body {
 .favorite-item .delete-btn:hover {
   background: #ee5a6f;
 }
+
+.weather-subheader{
+    display: flex;
+    justify-content: space-between;
+    font-size: large;
+}
+
+.description{
+    font-size: large;
+    font-weight: bold;
+}
