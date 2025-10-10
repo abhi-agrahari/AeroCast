@@ -4,6 +4,7 @@ import WeatherDisplay from "../components/WeatherDisplay";
 import Favorites from "../components/Favorites";
 import "../styles/Home.css";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 function Home() {
@@ -25,7 +26,7 @@ function Home() {
       setShowForecast(false);
     } catch (err) {
       console.error(err);
-      alert("Error fetching weather.");
+      toast.error("Error fetching weather.");
     }
   };
 
@@ -54,7 +55,7 @@ function Home() {
       localStorage.setItem("favorites", JSON.stringify(stored));
       setFavorites(stored);
     } else {
-      alert("City already in favorites!");
+      toast("City already in favorites!");
     }
   };
 
@@ -72,6 +73,7 @@ function Home() {
 
   return (
     <div className="home-container">
+      <Toaster />
       <div className="header">
         <h1 className="title">AeroCast</h1>
         <button className="pref-btn" onClick={() => navigate("/preferences")}>

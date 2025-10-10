@@ -64,7 +64,7 @@ function EmailPreferences() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* ✅ Modern toggle slider */}
+        {/* Modern toggle slider */}
         <div className="toggle-container">
           <span className="toggle-label">Turn on email notification</span>
           <label className="switch">
