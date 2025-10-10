@@ -2,16 +2,16 @@ package com.aerocast.backend.service;
 
 import com.aerocast.backend.Repository.PreferenceRepository;
 import com.aerocast.backend.model.UserPreference;
-import com.aerocast.backend.model.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Service
+@Component
 public class EmailSchedular {
+    @Autowired
+    private PreferenceRepository userPreferenceRepository;
 
     @Autowired
     private WeatherService weatherService;
@@ -19,28 +19,45 @@ public class EmailSchedular {
     @Autowired
     private EmailService emailService;
 
-    @Autowired
-    private PreferenceRepository userRepo;
+    @Scheduled(cron = "0 0 7 * * ?")
+    public void sendMorningEmails() {
+        sendEmails("morning");
+    }
 
-    private Map<String, Long> lastSent = new HashMap<>();
+    @Scheduled(cron = "0 0 12 * * ?")
+    public void sendAfternoonEmails() {
+        sendEmails("afternoon");
+    }
 
-    public void checkAndSendEmail(){
-        List<UserPreference> users = userRepo.findAll();
+    @Scheduled(cron = "0 0 18 * * ?")
+    public void sendEveningEmails() {
+        sendEmails("evening");
+    }
 
-        for(UserPreference user : users){
-            long now = System.currentTimeMillis();
-            long lastTime = lastSent.getOrDefault(user.getEmail(), 0L);
-            long hourPassed = (now - lastTime) / (1000*60*60);
+    private void sendEmails(String timeOfDay) {
+        List<UserPreference> users = userPreferenceRepository.findAll();
 
-            if(hourPassed >= user.getIntervalHours()){
-                WeatherResponse weather = weatherService.getWeatherByCity(user.getDefaultCity());
-                String body = "Weather in" + weather.getCity() + "\n" +
-                                "Temperature : " + weather.getTemperature() + "deg C\n" +
-                                "Humidity : " + weather.getHumidity() + "% \n" +
-                                "Wind Speed : " + weather.getWindSpeed() + "km/h";
+        for (UserPreference user : users) {
+            if (user.isEnabled()) {
+                String city = user.getCity();
+                String email = user.getEmail();
 
-                emailService.sendEmail(user.getEmail(), "Weather Update - " + weather.getCity(), body);
-                lastSent.put(user.getEmail(), now);
+                var weather = weatherService.getWeatherByCity(city);
+
+                String subject = "AeroCast Weather Update - " + city + " (" + timeOfDay + ")";
+                String body = String.format(
+                        "Hello!\n\nHere’s your %s weather update for %s:\n\n" +
+                                "Temperature: %.1f°C\n" +
+                                "Humidity: %d%%\n" +
+                                "Wind Speed: %.1f km/h\n\n" +
+                                "Stay updated with AeroCast!",
+                        timeOfDay, city,
+                        weather.getTemperature(),
+                        weather.getHumidity(),
+                        weather.getWindSpeed()
+                );
+
+                emailService.sendEmail(email, subject, body);
             }
         }
     }

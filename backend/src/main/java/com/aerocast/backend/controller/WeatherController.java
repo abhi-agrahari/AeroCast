@@ -2,7 +2,6 @@ package com.aerocast.backend.controller;
 
 import com.aerocast.backend.model.WeatherResponse;
 import com.aerocast.backend.service.WeatherService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
