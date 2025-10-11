@@ -19,7 +19,12 @@ public class EmailSchedular {
     @Autowired
     private EmailService emailService;
 
-    @Scheduled(cron = "0 0 7 * * ?")
+//    @Scheduled(cron = "0 0 7 * * ?")
+//    public void sendMorningEmails() {
+//        sendEmails("morning");
+//    }
+
+    @Scheduled(cron = "0 00 7 * * ?")
     public void sendMorningEmails() {
         sendEmails("morning");
     }
@@ -53,7 +58,7 @@ public class EmailSchedular {
                                 "Stay updated with AeroCast!",
                         timeOfDay, city,
                         weather.getTemperature(),
-                        weather.getHumidity(),
+                        (int)weather.getHumidity(),
                         weather.getWindSpeed()
                 );
 
